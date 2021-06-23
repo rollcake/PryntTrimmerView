@@ -162,6 +162,13 @@ public class ThumbSelectorView: AVAssetTimeSelector {
         let thumbPosition = thumbView.center.x + assetPreview.contentOffset.x - (thumbView.frame.width / 2)
         return getTime(from: thumbPosition)
     }
+    
+    public func setTime(_ time: CMTime) {
+        if let position = getPosition(from: time) {
+            updateThumbConstraint(with: CGPoint(x: position, y: 0))
+            updateSelectedTime()
+        }
+    }
 
     private func updateSelectedTime() {
         if let selectedTime = selectedTime {
