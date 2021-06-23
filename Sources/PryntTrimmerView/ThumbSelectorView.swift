@@ -166,7 +166,8 @@ public class ThumbSelectorView: AVAssetTimeSelector {
     public func setTime(_ time: CMTime) {
         if let position = getPosition(from: time) {
             updateThumbConstraint(with: CGPoint(x: position, y: 0))
-            updateSelectedTime()
+            generator?.cancelAllCGImageGeneration()
+            generateThumbnailImage(for: time)
         }
     }
 
