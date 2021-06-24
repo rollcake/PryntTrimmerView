@@ -27,6 +27,19 @@ public class VideoCropView: UIView {
             }
         }
     }
+    
+    public var scrollViewZoomScale: CGFloat {
+        return videoScrollView.scrollView.zoomScale
+    }
+    
+    public var scrollViewOffset: CGPoint {
+        return videoScrollView.scrollView.contentOffset
+    }
+    
+    public func setZoomScale(_ scale: CGFloat, offset: CGPoint) {
+        videoScrollView.scrollView.zoomScale = scale
+        videoScrollView.scrollView.setContentOffset(offset, animated: false)
+    }
 
     var cropFrame = CGRect.zero
 
