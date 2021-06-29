@@ -27,7 +27,7 @@ public class ThumbSelectorView: AVAssetTimeSelector {
     }
 
     private let thumbView = UIImageView()
-    private let dimmingView = UIView()
+    public let dimmingView = UIView()
 
     private var leftThumbConstraint: NSLayoutConstraint?
     private var currentThumbConstraint: CGFloat = 0
