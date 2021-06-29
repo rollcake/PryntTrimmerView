@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-private let margin: CGFloat = 0
+private let margin: CGFloat = 16
 
 /// A view to preview a video inside an `AVPlayer`, with a scroll view to be able to select a specific area of the video.
 /// Simply set the `asset` property to load you video inside the view, and use the `getImageCropFrame` method to retrieve the
@@ -17,8 +17,7 @@ private let margin: CGFloat = 0
 public class VideoCropView: UIView {
 
     let videoScrollView = VideoScrollView()
-    // cropMaskViewを表示する必要がないのですべてコメントアウトする
-//    let cropMaskView = CropMaskView()
+    let cropMaskView = CropMaskView()
 
     /// The asset being cropped. Setting the property will load the asset in the `AVPlayer` contained in the scroll view.
     public var asset: AVAsset? {
@@ -72,15 +71,15 @@ public class VideoCropView: UIView {
         videoScrollView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         videoScrollView.topAnchor.constraint(equalTo: topAnchor).isActive = true
 
-//        cropMaskView.isUserInteractionEnabled = false
-//        cropMaskView.translatesAutoresizingMaskIntoConstraints = false
-//
-//        addSubview(cropMaskView)
-//
-//        cropMaskView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
-//        cropMaskView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-//        cropMaskView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-//        cropMaskView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        cropMaskView.isUserInteractionEnabled = false
+        cropMaskView.translatesAutoresizingMaskIntoConstraints = false
+
+        addSubview(cropMaskView)
+
+        cropMaskView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+        cropMaskView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+        cropMaskView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        cropMaskView.topAnchor.constraint(equalTo: topAnchor).isActive = true
 
         setAspectRatio(aspectRatio, animated: false)
     }
@@ -103,7 +102,7 @@ public class VideoCropView: UIView {
         let edgeInsets = UIEdgeInsets(top: origin.y, left: origin.x, bottom: origin.y, right: origin.x)
         let duration: TimeInterval = animated ? 0.15 : 0.0
 
-//        cropMaskView.setCropFrame(cropFrame, animated: animated)
+        cropMaskView.setCropFrame(cropFrame, animated: animated)
         UIView.animate(withDuration: duration, delay: 0, options: [.beginFromCurrentState, .curveEaseInOut], animations: {
             self.videoScrollView.scrollView.contentInset = edgeInsets
         }, completion: nil)
