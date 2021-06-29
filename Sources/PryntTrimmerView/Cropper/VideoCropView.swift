@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-private let margin: CGFloat = 16
+private let margin: CGFloat = 0
 
 /// A view to preview a video inside an `AVPlayer`, with a scroll view to be able to select a specific area of the video.
 /// Simply set the `asset` property to load you video inside the view, and use the `getImageCropFrame` method to retrieve the
