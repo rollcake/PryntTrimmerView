@@ -11,7 +11,7 @@ import AVFoundation
 
 /// A delegate to be notified of when the thumb position has changed. Useful to link an instance of the ThumbSelectorView to a
 /// video preview like an `AVPlayer`.
-public protocol ThumbSelectorViewDelegate: class {
+public protocol ThumbSelectorViewDelegate: AnyObject {
     func didChangeThumbPosition(_ imageTime: CMTime)
 }
 
@@ -71,28 +71,46 @@ public class ThumbSelectorView: AVAssetTimeSelector {
         thumbView.widthAnchor.constraint(equalTo: thumbView.heightAnchor).isActive = true
         thumbView.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
         thumbView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-
-        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(ThumbSelectorView.handlePanGesture(_:)))
-        thumbView.addGestureRecognizer(panGestureRecognizer)
+        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
+        addGestureRecognizer(panGestureRecognizer)
+        let thumbPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handleThumbViewPanGesture(_:)))
+        thumbView.addGestureRecognizer(thumbPanGestureRecognizer)
     }
 
     // MARK: - Gesture handling
-
     @objc func handlePanGesture(_ gestureRecognizer: UIPanGestureRecognizer) {
-        guard let superView = gestureRecognizer.view?.superview else { return }
-
+        let translation = gestureRecognizer.translation(in: self)
         switch gestureRecognizer.state {
-
         case .began:
-            currentThumbConstraint = leftThumbConstraint!.constant
+            let startPoint = gestureRecognizer.location(in: self)
+            currentThumbConstraint = max(startPoint.x - thumbView.bounds.width / 2, 0)
+            updateThumbConstraint(with: translation)
+            layoutIfNeeded()
             updateSelectedTime()
         case .changed:
-
+            updateThumbConstraint(with: translation)
+            layoutIfNeeded()
+            updateSelectedTime()
+        case .cancelled, .ended, .failed:
+            updateSelectedTime()
+        default: break
+        }
+    }
+    
+    @objc func handleThumbViewPanGesture(_ gestureRecognizer: UIPanGestureRecognizer) {
+        guard let superView = gestureRecognizer.view?.superview else { return }
+        
+        switch gestureRecognizer.state {
+        case .began:
+            if let constant = leftThumbConstraint?.constant {
+                currentThumbConstraint = constant
+            }
+            updateSelectedTime()
+        case .changed:
             let translation = gestureRecognizer.translation(in: superView)
             updateThumbConstraint(with: translation)
             layoutIfNeeded()
             updateSelectedTime()
-
         case .cancelled, .ended, .failed:
             updateSelectedTime()
         default: break
