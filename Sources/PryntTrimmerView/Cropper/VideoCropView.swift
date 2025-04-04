@@ -45,6 +45,10 @@ public class VideoCropView: UIView {
         videoScrollView.scrollView.setContentOffset(offset, animated: false)
     }
 
+    public func setCropMaskViewHidden(_ isHidden: Bool) {
+        cropMaskView.isHidden = isHidden
+    }
+
     var cropFrame = CGRect.zero
 
     /// The current aspect ratio of the crop view.
