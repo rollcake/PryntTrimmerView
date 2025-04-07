@@ -13,6 +13,7 @@ import AVFoundation
 /// video preview like an `AVPlayer`.
 public protocol ThumbSelectorViewDelegate: AnyObject {
     func didChangeThumbPosition(_ imageTime: CMTime)
+    func didEndThumbPosition(_ imageTime: CMTime)
 }
 
 /// A view to select a specific time of an `AVAsset`. It is composed of an asset preview within a scroll view, and a thumb view
@@ -91,7 +92,12 @@ public class ThumbSelectorView: AVAssetTimeSelector {
             updateThumbConstraint(with: translation)
             layoutIfNeeded()
             updateSelectedTime()
-        case .cancelled, .ended, .failed:
+        case .ended:
+            updateSelectedTime()
+            if let selectedTime {
+                delegate?.didEndThumbPosition(selectedTime)
+            }
+        case .cancelled, .failed:
             updateSelectedTime()
         default: break
         }
@@ -111,7 +117,12 @@ public class ThumbSelectorView: AVAssetTimeSelector {
             updateThumbConstraint(with: translation)
             layoutIfNeeded()
             updateSelectedTime()
-        case .cancelled, .ended, .failed:
+        case .ended:
+            updateSelectedTime()
+            if let selectedTime {
+                delegate?.didEndThumbPosition(selectedTime)
+            }
+        case .cancelled, .failed:
             updateSelectedTime()
         default: break
         }
