@@ -18,6 +18,8 @@ class VideoScrollView: UIView {
     var playerItem: AVPlayerItem?
     var player: AVPlayer?
     var playerLayer: AVPlayerLayer?
+    
+    var onChangeScroll: (() -> Void)?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -99,5 +101,9 @@ extension VideoScrollView: UIScrollViewDelegate {
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         let scaledAssetSize = CGSize(width: assetSize.width * scale, height: assetSize.height * scale)
         scrollView.contentSize = scaledAssetSize
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        onChangeScroll?()
     }
 }
