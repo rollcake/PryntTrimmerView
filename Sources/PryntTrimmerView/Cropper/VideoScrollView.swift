@@ -36,6 +36,7 @@ class VideoScrollView: UIView {
         scrollView.showsVerticalScrollIndicator = false
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.decelerationRate = .fast
         scrollView.addSubview(contentView)
         scrollView.delegate = self
         addSubview(scrollView)
