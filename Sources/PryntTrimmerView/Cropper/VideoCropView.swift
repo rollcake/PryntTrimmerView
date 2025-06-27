@@ -40,6 +40,8 @@ public class VideoCropView: UIView {
         return videoScrollView.scrollView.contentOffset
     }
     
+    public var onChangeScroll: (() -> Void)?
+    
     public func setZoomScale(_ scale: CGFloat, offset: CGPoint) {
         videoScrollView.scrollView.zoomScale = scale
         videoScrollView.scrollView.setContentOffset(offset, animated: false)
@@ -78,6 +80,9 @@ public class VideoCropView: UIView {
         videoScrollView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
         videoScrollView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         videoScrollView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        videoScrollView.onChangeScroll = { [weak self] in
+            self?.onChangeScroll?()
+        }
 
         cropMaskView.isUserInteractionEnabled = false
         cropMaskView.translatesAutoresizingMaskIntoConstraints = false
@@ -140,5 +145,9 @@ public class VideoCropView: UIView {
         frame.size.height = ceil(cropBoxFrame.size.height * (imageSize.height / contentSize.height))
         frame.size.height = min(imageSize.height, frame.size.height)
         return frame
+    }
+    
+    public func setCropMaskBorderHidden(_ hidden: Bool) {
+        cropMaskView.frameLayer.isHidden = hidden
     }
 }
